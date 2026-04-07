@@ -7,8 +7,8 @@ from flask import (current_app, render_template, url_for, jsonify, request, sess
 def render():
     netmig_bp = current_app.blueprints.get("netmig")
 
-    if netmig_bp.scripts_db:
-        first_script_id = next(iter(netmig_bp.scripts_db))
+    if netmig_bp.scripts:
+        first_script_id = next(iter(netmig_bp.scripts))
         return redirect(url_for("netmig.render_script", script_id=first_script_id))
 
     kwargs = {
@@ -16,6 +16,7 @@ def render():
             {"title": "NetMig", "url": url_for("netmig.render")},
             {"title": "Home"}
         ],
+        "scripts": netmig_bp.scripts
     }
     return render_template("netmig.html", **kwargs)
 
