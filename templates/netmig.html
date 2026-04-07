@@ -1,0 +1,23 @@
+{% extends "atx.home.html" %}
+
+{% block sidebar %}
+
+<link rel="stylesheet" id="theme-stylesheet" href="{{ url_for('netmig.static', filename='css/common.css') }}">
+
+<div style="display: flex; flex-direction: column; height: calc(100vh - 64px);">
+    <div>
+        {% for script_id, script_data in scripts.items() %}
+        <div class="menu-item" data-href="{{ url_for('netmig.render_script', script_id=script_id) }}">
+            <span class="material-icons menu">{{ script_data.icon }}</span>
+            <span class="menu-text">{{ script_data.name }}</span>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="menu-item admin-only" style="margin-top: auto;" data-href="{{ url_for('netmig.manage_scripts') }}">
+        <span class="material-icons menu">app_registration</span>
+        <span class="menu-text">Manage</span>
+    </div>
+</div>
+
+{% endblock %}

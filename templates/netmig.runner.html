@@ -1,0 +1,136 @@
+{% extends "netmig.html" %}
+
+{% block main %}
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@5.5.1/github-markdown.min.css">
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script>const scriptId = "{{ script_data.id }}";</script>
+<script src="{{ url_for('netmig.static', filename='js/netmig.runner.js') }}"></script>
+<script src="{{ url_for('static', filename='js/atx.utils.js') }}"></script>
+
+
+<div class="page-header">
+    <div class="breadcrumb">
+        {% for crumb in breadcrumbs %}
+        {% if not loop.last %}
+        <a href="{{ crumb.url }}">{{ crumb.title }}</a>
+        <span class="sep">></span>
+        {% else %}
+        <span class="current">{{ crumb.title }}</span>
+        {% endif %}
+        {% endfor %}
+    </div>
+
+    <div class="actions">
+        <button class="icon-text" type="button" id="runScriptBtn">
+            <span class="material-icons">play_arrow</span> Run
+        </button>
+        <button class="icon-text" type="button" id="scriptInfoBtn">
+            <span class="material-icons">info</span> Info
+        </button>
+    </div>
+</div>
+
+<div class="scripts-main">
+
+    <!-- Interface -->
+    <section class="scripts-interface">
+        <div class="tabs">
+            <button class="tab active" data-tab="interface">Interface</button>
+        </div>
+
+        <div class="tab-pane active" id="interface">
+            <form id="scriptInterfaceForm" class="script-template">
+                {{ input_html | safe }}
+            </form>
+        </div>
+    </section>
+
+    <!-- Output -->
+    <div id="output-dock" class="output-dock">
+
+        <button id="output-dock-toggle" class="output-dock-toggle icon-btn">
+            <span class="material-icons">keyboard_arrow_left</span>Output
+        </button>
+
+        <section class="scripts-output">
+
+            <div class="tabs">
+                <button class="tab active" data-tab="console">Console</button>
+                <button class="tab" data-tab="files">Outputs</button>
+            </div>
+
+            <div class="tab-pane active" id="console">
+                <div id="consoleOutput" class="console"></div>
+            </div>
+
+            <div class="tab-pane" id="files">
+                <div class="output-files">
+                    <table id="outputsTable" class="display" style="width:100%;">
+                        <thead>
+                        <tr>
+                            <th>Filename</th>
+                            <th>Action</th>
+                        </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+
+
+<!-- Info Modal -->
+<div class="simple-modal-overlay" id="scriptInfoModal">
+    <div class="simple-modal-container" style="width: 1100px; height: 90vh;">
+
+        <!-- Modal Header -->
+        <div class="simple-modal-header">
+            <div class="simple-modal-title">Info</div>
+            <button class="close" id="closeScriptInfoModalBtn">
+                <span class="material-icons">close</span>
+            </button>
+        </div>
+
+        <!-- Modal Body -->
+        <div class="simple-modal-body" style="overflow-y: auto;">
+            <article id="scriptInfoContent" class="markdown-body">
+                Loading documentation…
+            </article>
+        </div>
+    </div>
+</div>
+
+<!-- Run Modal -->
+<div class="simple-modal-overlay" id="runModal">
+    <div class="simple-modal-container" style="width: 600px;">
+
+        <div class="simple-modal-header">
+            <div class="simple-modal-title">Run</div>
+            <button class="close" id="closeRunModal">
+                <span class="material-icons">close</span>
+            </button>
+        </div>
+
+        <div class="simple-modal-body">
+            <form id="runModalForm">
+                <div class="form-group-row">
+                    <label>Connector</label>
+                    <select id="runModalConnectors" required>
+                        <option value="">-- Select Connector --</option>
+                    </select>
+                </div>
+            </form>
+        </div>
+
+        <div class="simple-modal-footer">
+            <button type="submit" form="runModalForm" id="confirmRunModal" class="icon-text">
+                <span class="material-icons">play_arrow</span> Run
+            </button>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
