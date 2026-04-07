@@ -13,7 +13,8 @@ class NetMig(Blueprint):
         "name": "NetMig",
         "description": "Script Management and Execution.",
         "version": "1.0.0",
-        "icon": "netmig.ico"
+        "icon": "netmig.ico",
+        "url_prefix": "/netmig"
     }
 
     def __init__(self, **kwargs):
