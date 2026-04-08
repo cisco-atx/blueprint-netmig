@@ -52,7 +52,7 @@ class NetMig(Blueprint):
 
     def setup_db(self):
         """ Initializes the databases for scripts using SqliteDict, storing it in the designated database directory for the NetMig blueprint. """
-        self.scripts_db = SqliteDict(os.path.join(self.DB_DIR, "scripts"), autocommit=True)
+        self.scripts_db = SqliteDict(os.path.join(self.DB_DIR, "scripts.sqlite"), autocommit=True)
 
     def setup_runner(self):
         """ Initializes the Runner service for the NetMig blueprint, allowing for the management and execution of scripts defined within the blueprint's functionality. """
