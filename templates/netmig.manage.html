@@ -4,9 +4,13 @@
 <!-- Include common JavaScript for management-related operations -->
 <script src="{{ url_for('netmig.static', filename='js/netmig.manage.js') }}"></script>
 
-<!-- Header Row with Breadcrumbs and Action Buttons -->
-<div class="page-header">
-    <div class="breadcrumb">
+<!-- =========================
+     Page Header Section
+     Contains breadcrumbs and action buttons
+========================== -->
+<header class="page-header">
+    <!-- Breadcrumb Navigation -->
+    <nav class="breadcrumb">
         {% for crumb in breadcrumbs %}
         {% if not loop.last %}
         <a href="{{ crumb.url }}">{{ crumb.title }}</a>
@@ -15,103 +19,144 @@
         <span class="current">{{ crumb.title }}</span>
         {% endif %}
         {% endfor %}
-    </div>
+    </nav>
 
+    <!-- Action Buttons -->
     {% block action_buttons %}
     <div class="actions">
         <button class="icon-text" id="deleteSelectedBtn" style="display:none;">
-            <span class="material-icons">delete_sweep</span>Delete Selected
+            <span class="material-icons">delete_sweep</span>
+            Delete Selected
         </button>
+
         <button class="icon-text" id="openModalBtn">
-            <span class="material-icons">desktop_landscape_add</span>{{ add_text }}
+            <span class="material-icons">desktop_landscape_add</span>
+            {{ add_text }}
         </button>
     </div>
     {% endblock %}
-</div>
+</header>
 
-<!-- Data Table for Management -->
-<table class="display" id="manageDatatable" style="width:100%">
-    <thead>
-    <tr>
-        <th><input type="checkbox" id="selectAll"></th>
-        {% for col in columns %}
-        <th>{{ col }}</th>
+<!-- =========================
+     Data Table Section
+     Displays dataset with filters and actions
+========================== -->
+<section>
+    <table class="display" id="manageDatatable" style="width:100%">
+        <thead>
+        <!-- Table Header Row -->
+        <tr>
+            <th>
+                <input type="checkbox" id="selectAll">
+            </th>
+            {% for col in columns %}
+            <th>{{ col }}</th>
+            {% endfor %}
+            <th>Actions</th>
+        </tr>
+
+        <!-- Column Filter Row -->
+        <tr>
+            <th></th>
+            {% for col in columns %}
+            <th>
+                <input
+                        type="text"
+                        class="col-filter"
+                        data-col="{{ loop.index0 }}"
+                        placeholder="Filter {{ col }}"
+                >
+            </th>
+            {% endfor %}
+            <th></th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <!-- Table Body Content -->
+        {% block table_body %}
+        {% for data_item in dataset %}
+        <tr>
+            <!-- Row Selection Checkbox -->
+            <td>
+                <input
+                        type="checkbox"
+                        class="row-check"
+                        data-id="{{ data_item['Id'] }}"
+                >
+            </td>
+
+            <!-- Data Columns -->
+            {% for col in columns %}
+            {% if col == "Name" %}
+            <!-- Special rendering for Name column with icon -->
+            <td>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <span class="material-icons">{{ data_item['Icon'] }}</span>
+                    {{ data_item[col] }}
+                </div>
+            </td>
+            {% else %}
+            <td>{{ data_item[col] }}</td>
+            {% endif %}
+            {% endfor %}
+
+            <!-- Row Actions -->
+            <td class="actions">
+                <button class="delete-btn icon-text">
+                    <span class="material-icons">delete</span>
+                    Delete
+                </button>
+            </td>
+        </tr>
         {% endfor %}
-        <th>Actions</th>
-    </tr>
+        {% endblock %}
+        </tbody>
+    </table>
+</section>
 
-    <tr>
-        <th></th>
-        {% for col in columns %}
-        <th>
-            <input type="text" class="col-filter" data-col="{{ loop.index0 }}" placeholder="Filter {{ col }}">
-        </th>
-        {% endfor %}
-        <th></th>
-    </tr>
-    </thead>
-
-    <tbody>
-    <!-- Table Body Content -->
-    {% block table_body %}
-    {% for data_item in dataset %}
-    <tr>
-        <td>
-            <input type="checkbox" class="row-check" data-id="{{ data_item['Id'] }}">
-        </td>
-
-        {% for col in columns %}
-        {% if col == "Name" %}
-        <td>
-            <div style="display: flex; align-items: center; gap: 8px;">
-                <span class="material-icons">{{ data_item['Icon'] }}</span>{{ data_item[col] }}
-            </div>
-        </td>
-        {% else %}
-        <td>{{ data_item[col] }}</td>
-        {% endif %}
-        {% endfor %}
-
-        <td class="actions">
-            <button class="delete-btn icon-text">
-                <span class="material-icons">delete</span>Delete
-            </button>
-        </td>
-    </tr>
-    {% endfor %}
-    {% endblock %}
-    </tbody>
-</table>
-
-<!-- Delete Confirmation Modal -->
+<!-- =========================
+     Delete Confirmation Modal
+========================== -->
 <div class="simple-modal-overlay" id="deleteConfirmModal">
     <div class="simple-modal-container">
         <form>
+            <!-- Modal Header -->
             <div class="simple-modal-header">
                 <div class="simple-modal-title">Confirm Delete</div>
                 <button class="close" id="closeDeleteModalBtn">
                     <span class="material-icons">close</span>
                 </button>
             </div>
+
+            <!-- Modal Body -->
             <div class="simple-modal-body">
                 <p>Are you sure you want to delete the selected row(s)?</p>
             </div>
+
+            <!-- Modal Footer -->
             <div class="simple-modal-footer">
                 <button class="icon-text" id="confirmDeleteBtn" type="button">
-                    <span class="material-icons">delete</span>Yes, Delete
+                    <span class="material-icons">delete</span>
+                    Yes, Delete
                 </button>
+
                 <button class="icon-text" id="cancelDeleteBtn" type="button">
-                    <span class="material-icons">close</span>Cancel
+                    <span class="material-icons">close</span>
+                    Cancel
                 </button>
             </div>
         </form>
     </div>
 </div>
 
-<!-- Add/Edit Modal -->
+<!-- =========================
+     Add/Edit Modal
+     Supports local upload or Git clone
+========================== -->
 <div id="modalOverlay" class="simple-modal-overlay">
     <div class="simple-modal-container" style="width: 800px;">
-
+        <!-- Modal Header -->
         <div class="simple-modal-header">
             <h5 class="simple-modal-title" id="modalTitle">Add Script</h5>
             <button class="close" id="closeModalBtn">
@@ -119,32 +164,53 @@
             </button>
         </div>
 
+        <!-- Modal Body -->
         <div class="simple-modal-body">
             <form id="modalForm">
-                <!-- Local upload -->
+                <!-- Local Upload Section -->
                 <div class="form-grid" style="grid-template-columns: max-content 1fr auto;">
                     <label style="width: 90px;">File Directory</label>
-                    <input type="text" id="scriptDir" placeholder="/path/to/script-directory">
-                    <button style="width: 100px;" type="button" id="uploadFileBtn" class="icon-text">
-                        <span class="material-icons">upload</span> Upload
+                    <input
+                            type="text"
+                            id="scriptDir"
+                            placeholder="/path/to/script-directory"
+                    >
+                    <button
+                            style="width: 100px;"
+                            type="button"
+                            id="uploadFileBtn"
+                            class="icon-text"
+                    >
+                        <span class="material-icons">upload</span>
+                        Upload
                     </button>
                 </div>
 
+                <!-- Separator -->
                 <div style="text-align:center; margin: 10px 0; font-weight: bold;">
                     OR
                 </div>
 
-                <!-- Git clone -->
+                <!-- Git Clone Section -->
                 <div class="form-grid" style="grid-template-columns: max-content 1fr auto;">
                     <label style="width: 90px;">Git Repository</label>
-                    <input type="text" id="scriptGit" placeholder="https://github.com/user/script-repo.git">
-                    <button style="width: 100px;" type="button" id="cloneGitBtn" class="icon-text">
-                        <span class="material-icons">graph_8</span> Clone
+                    <input
+                            type="text"
+                            id="scriptGit"
+                            placeholder="https://github.com/user/script-repo.git"
+                    >
+                    <button
+                            style="width: 100px;"
+                            type="button"
+                            id="cloneGitBtn"
+                            class="icon-text"
+                    >
+                        <span class="material-icons">graph_8</span>
+                        Clone
                     </button>
                 </div>
             </form>
         </div>
     </div>
 </div>
-
 {% endblock %}
