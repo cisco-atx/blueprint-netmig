@@ -1,3 +1,12 @@
+/**
+ * netmig.manage.js
+ *
+ * This JavaScript file manages the interactive functionalities of the NetMig management interface.
+ * It initializes the DataTable with filtering capabilities, handles bulk and individual deletion of items,
+ * and manages the upload of local directories and cloning of Git repositories for scripts.
+ * The script ensures a responsive user experience by dynamically showing/hiding elements based on user actions.
+ */
+
 $(document).ready(function () {
 
     // Initialize the DataTable with specified configuration and filters

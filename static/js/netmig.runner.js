@@ -1,10 +1,14 @@
 /**
- * scripts.layout.js
-    * Handles the layout and interactions for the script execution page, including:
-    * - Console output streaming
-    * - Outputs table management
-    * - Run modal with Connector selection
-    * - Script info modal with documentation
+ * netmig.runner.js
+ *
+ * This script manages the client-side functionality for running network migration scripts.
+ * It handles:
+ * - Starting a script and streaming its output in real-time to a console area.
+ * - Displaying generated output files in a table with options to download or delete them.
+ * - Managing UI interactions such as tabs and modals for script information and run confirmation.
+ * - Communicating with the server via fetch API for running scripts and managing outputs.
+ *
+ * The script ensures a responsive and interactive experience for users executing network migration tasks.
  */
 
 
