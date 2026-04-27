@@ -135,6 +135,10 @@ class NetMig(Blueprint):
             if key not in meta:
                 raise ValueError(f"meta missing '{key}'")
 
+        required_fn = getattr(script_cls, "required", None)
+        if not callable(required_fn):
+            raise ValueError("required() method is required")
+
         input_fn = getattr(script_cls, "input", None)
         if not callable(input_fn):
             raise ValueError("input() method is required")

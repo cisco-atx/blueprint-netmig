@@ -65,6 +65,7 @@ def render_script(script_id):
         "scripts": netmig_bp.scripts,
         "script_data": script_data,
         "input_html": netmig_bp.runner.scripts[script_id].input(),
+        "required": netmig_bp.runner.scripts[script_id].required(),
     }
     return render_template("netmig.runner.html", **kwargs)
 

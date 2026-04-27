@@ -11,10 +11,9 @@
 <script>
     // Script identifier used by frontend logic
     const scriptId = "{{ script_data.id }}";
+    const scriptRequiredConfig = {{ required | tojson }};
 </script>
 <script src="{{ url_for('netmig.static', filename='js/netmig.runner.js') }}"></script>
-<script src="{{ url_for('static', filename='js/atx.utils.js') }}"></script>
-
 
 <!-- ========================= -->
 <!-- Page Header & Navigation -->
