@@ -278,8 +278,6 @@ document.addEventListener("DOMContentLoaded", () => {
             modal.style.display = "none";
             form.reset();
 
-            console.log(config)
-
             runScript(config);
         };
     }
@@ -290,6 +288,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (!scriptRequiredConfig || scriptRequiredConfig.length === 0) {
             runScript({});
+            openOutputDock();
             return;
         }
 
