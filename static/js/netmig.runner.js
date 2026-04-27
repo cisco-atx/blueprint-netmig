@@ -133,7 +133,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     /* ---------- Run Script ---------- */
 
-    async function runScript(connectorConfig) {
+    async function runScript(config) {
 
         resetConsole();
         appendLine({ type: "start", message: "Starting script…" });
@@ -157,9 +157,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const payload = {
                 inputs,
-                config: {
-                    connector: connectorConfig
-                }
+                config: config
             };
 
             const resp = await fetch(`/netmig/run/${scriptId}`, {
@@ -274,14 +272,13 @@ document.addEventListener("DOMContentLoaded", () => {
                     return;
                 }
 
-                config.connector = {
-                    name: selected,
-                    config: connectorMap[selected]
-                };
+                config.connector = connectorMap[selected]
             }
 
             modal.style.display = "none";
             form.reset();
+
+            console.log(config)
 
             runScript(config);
         };
