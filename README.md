@@ -1,6 +1,6 @@
-<p>
+<div>
 <img src="https://raw.githubusercontent.com/cisco-atx/blueprint-netmig/refs/heads/main/netmig.ico" width="64">
-</p>
+</div>
 
 # NetMig
 
